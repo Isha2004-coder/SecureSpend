@@ -23,7 +23,7 @@ SecureSpend is a Flask-based web application designed to help users analyze and 
 
 This project uses publicly available transaction data from [Kaggle](https://www.kaggle.com/):
 
-**Dataset Name: [Financial Transactions Dataset"]
+Dataset Name: Financial Transactions Dataset
 
 You will need to download the dataset separately from Kaggle due to size and licensing restrictions. After downloading, place the following files in the project directory:
 
