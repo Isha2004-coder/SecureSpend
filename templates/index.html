@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BudgetWise AI</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .fraud {
+            color: red;
+            font-weight: bold;
+        }
+        .safe {
+            color: green;
+        }
+    </style>
+</head>
+<body class="container my-4">
+
+    <div class="text-center mb-4">
+        <h1>💰 BudgetWise AI</h1>
+        <p class="text-muted">Monitor your transactions and stay alert</p>
+    </div>
+
+    <div class="mb-4">
+        <h2>Recent Transactions</h2>
+        <input type="text" id="searchBox" class="form-control mb-3" placeholder="Search by Merchant Category..." onkeyup="filterTable()">
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Amount</th>
+                        <th>Merchant Category</th>
+                        <th>Fraud?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for t in transactions %}
+                    <tr>
+                        <td>{{ t['id'] }}</td>
+                        <td>${{ "%.2f"|format(t['amount']) }}</td>
+                        <td>{{ t['merchant_category'] }}</td>
+                        <td class="{{ 'fraud' if t['is_fraud'] else 'safe' }}">
+                            {{ 'Yes ⚠️' if t['is_fraud'] else 'No ✅' }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    {% if summary %}
+    <div class="mb-4">
+        <h2>📊 Top 5 Merchant Categories</h2>
+        <ul class="list-group">
+            {% for row in summary %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <strong>{{ row['merchant_category'] }}</strong>
+                <span>{{ row['count'] }} txns • Avg: ${{ "%.2f"|format(row['mean']) }}</span>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="mb-4">
+        <h2>📈 Add More Analytics</h2>
+        <p class="text-muted">Coming soon: fraud trends, monthly summaries, MCC breakdowns, and more.</p>
+        <!-- You can replace or populate this section dynamically -->
+        <div class="card p-3 bg-light">
+            <p><strong>Total Fraudulent Transactions:</strong> {{ fraud_count }}</p>
+            <p><strong>Total Safe Transactions:</strong> {{ safe_count }}</p>
+            <p><strong>Total Amount Spent:</strong> ${{ "%.2f"|format(total_spent) }}</p>
+        </div>
+    </div>
+
+    <script>
+    function filterTable() {
+        const input = document.getElementById("searchBox").value.toLowerCase();
+        const rows = document.querySelectorAll("table tbody tr");
+        rows.forEach(row => {
+            const category = row.cells[2].textContent.toLowerCase();
+            row.style.display = category.includes(input) ? "" : "none";
+        });
+    }
+    </script>
+
+</body>
+</html>
