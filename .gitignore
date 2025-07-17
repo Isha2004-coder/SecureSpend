@@ -6,4 +6,7 @@ __pycache__/
 venv/
 *.sqlite3
 .DS_Store
+train_fraud_labels.json
+transactions_data.csv
+
 
